@@ -20,6 +20,9 @@ function App() {
           <p>
             Edit <code>src/App.jsx</code> and save to test... Testing code upload <code>HMR</code>
           </p>
+          
+          Hello
+
         </div>
         <button
           type="button"
