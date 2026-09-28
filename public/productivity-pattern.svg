@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
+  <!-- Seamless tile. Transparent: pair with background-color #F4F1EA -->
+  <g stroke="#D3C9B5">
+    <!-- Spiral notebook -->
+    <g transform="translate(40 36) rotate(-8 32 32)">
+      <rect x="10" y="4" width="44" height="56" rx="4"/>
+      <path d="M4 14h10M4 26h10M4 38h10M4 50h10"/>
+      <path d="M22 18h24M22 28h24M22 38h16"/>
+    </g>
+
+    <!-- Ruler -->
+    <g transform="translate(50 214) rotate(-18 45 9)">
+      <rect x="0" y="0" width="90" height="20" rx="3"/>
+      <path d="M10 0v8M20 0v5M30 0v8M40 0v5M50 0v8M60 0v5M70 0v8M80 0v5"/>
+    </g>
+
+    <!-- Alarm clock -->
+    <g transform="translate(380 164) rotate(-6 24 26)">
+      <circle cx="24" cy="26" r="18"/>
+      <path d="M24 16v10l7 5"/>
+      <path d="M6 12a7 7 0 0 1 9-7M42 12a7 7 0 0 0-9-7"/>
+      <path d="M12 42l-4 4M36 42l4 4"/>
+    </g>
+
+    <!-- Checklist -->
+    <g transform="translate(170 392) rotate(-5 30 26)">
+      <rect x="0" y="0" width="12" height="12" rx="2"/>
+      <path d="M3 6l2.5 2.5L10 3"/>
+      <path d="M20 6h36"/>
+      <rect x="0" y="20" width="12" height="12" rx="2"/>
+      <path d="M3 26l2.5 2.5L10 23"/>
+      <path d="M20 26h28"/>
+      <rect x="0" y="40" width="12" height="12" rx="2"/>
+      <path d="M20 46h32"/>
+    </g>
+
+    <!-- Paperclip -->
+    <g transform="translate(52 316) rotate(30 18 26)">
+      <path d="M14 22V10a8 8 0 0 1 16 0v28a12 12 0 0 1-24 0V16"/>
+    </g>
+  </g>
+
+  <g stroke="#C4D3CB">
+    <!-- Pencil -->
+    <g transform="translate(176 96) rotate(28 36 11)">
+      <path d="M10 4h42l14 7-14 7H10z"/>
+      <rect x="0" y="4" width="10" height="14" rx="3"/>
+      <path d="M52 4v14"/>
+      <path d="M61 8.5l5 2.5-5 2.5z" fill="#C4D3CB"/>
+    </g>
+
+    <!-- Light bulb -->
+    <g transform="translate(330 396) rotate(10 24 24)">
+      <path d="M16 32a14 14 0 1 1 16 0v6H16z"/>
+      <path d="M18 44h12"/>
+      <path d="M22 26l2 4 2-4"/>
+    </g>
+
+    <!-- Plus marks -->
+    <path d="M290 170v14M283 177h14"/>
+    <path d="M430 438v12M424 444h12"/>
+  </g>
+
+  <g stroke="#E6CDB8">
+    <!-- Coffee mug -->
+    <g transform="translate(362 44) rotate(6 22 24)">
+      <path d="M4 12h32v24a8 8 0 0 1-8 8H12a8 8 0 0 1-8-8z"/>
+      <path d="M36 18h4a6 6 0 0 1 0 12h-4"/>
+      <path d="M14 2c-2 3 2 4 0 7M24 2c-2 3 2 4 0 7"/>
+    </g>
+
+    <!-- Sticky note -->
+    <g transform="translate(226 236) rotate(8 22 22)">
+      <path d="M0 0h46v32L32 46H0z"/>
+      <path d="M46 32H32v14"/>
+      <path d="M10 14h24M10 24h16"/>
+    </g>
+
+    <!-- Doodle stars -->
+    <path d="M148 150l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>
+    <path d="M28 150l2 4.5 4.5.5-3.2 3.2.8 4.8-4.1-2.3-4.1 2.3.8-4.8-3.2-3.2 4.5-.5z"/>
+
+    <!-- Squiggle -->
+    <path d="M384 316c6-8 12 8 18 0s12 8 18 0 12 8 18 0"/>
+  </g>
+
+  <!-- Confetti dots -->
+  <g fill="#D3C9B5">
+    <circle cx="272" cy="306" r="3"/>
+    <circle cx="116" cy="298" r="2.5"/>
+    <circle cx="444" cy="132" r="3"/>
+    <circle cx="112" cy="440" r="2.5"/>
+    <circle cx="262" cy="330" r="2.5"/>
+    <circle cx="300" cy="24" r="2.5"/>
+  </g>
+</svg>
