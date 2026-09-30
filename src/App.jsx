@@ -8,9 +8,10 @@ function App() {
 
   return (
     <>
-      <div class="flex min-h-full flex-col">
+      <div className="flex min-h-full flex-col">
         <Header />
         <Board />
+        
       </div>
     </>
   )
