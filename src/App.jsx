@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import Header from './components/Header'
-import Board from './components/Board'
+import { useState, useEffect } from 'react';
+import Header from './components/Header';
+import Board from './components/Board';
 
+const debugMode = true;
 
 const NOTES = [
   { id: 1, columnId: 'todo', title: 'Buy groceries', body: 'Milk, eggs, bread' },
@@ -10,25 +11,31 @@ const NOTES = [
   { id: 4, columnId: 'done', title: 'Set up the project', body: 'Vite + Tailwind' },
 ];
 
+// Runs once when this file loads, so every page refresh starts from NOTES.
+if (debugMode) {
+  localStorage.removeItem('notes');
+}
+
 function App() {
-  const [notes,setNotes] = useState(NOTES)
+  const [notes, setNotes] = useState(() => {
+    return JSON.parse(localStorage.getItem('notes')) ?? NOTES;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
 
   function addNote() {
-
-    const newNote = {id: Date.now(), columnId: 'todo', title:'addnewnote'}
-
-    setNotes((prev) => [...prev,newNote])
+    const newNote = { id: Date.now(), columnId: 'todo', title: 'addnewnote' };
+    setNotes((prev) => [...prev, newNote]);
   }
 
   return (
-    
-      <div className="flex min-h-full flex-col">
-        <Header onNewNote={addNote} />
-        <Board notes={notes} />
-        
-      </div>
-    
-  )
+    <div className="flex min-h-full flex-col">
+      <Header onNewNote={addNote} />
+      <Board notes={notes} />
+    </div>
+  );
 }
 
-export default App
+export default App;
