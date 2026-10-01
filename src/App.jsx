@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Board from './components/Board';
 
-const debugMode = true;
+const debugMode = false;
 
 const NOTES = [
   { id: 1, columnId: 'todo', title: 'Buy groceries', body: 'Milk, eggs, bread' },
