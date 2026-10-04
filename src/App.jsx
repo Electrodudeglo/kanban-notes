@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Board from './components/Board';
+import NoteForm from './components/NoteForm';
 
 const debugMode = false;
 
@@ -33,7 +34,8 @@ function App() {
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={addNote} />
-      <Board notes={notes} />
+      <NoteForm/>
+      <Board notes={notes} />     
     </div>
   );
 }
