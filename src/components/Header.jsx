@@ -34,8 +34,7 @@ export default function Header({ onSearch, onNewNote }) {
         <button
           type="button"
           onClick={onNewNote}
-          className="inline-flex h-11 shrink-0 cursor-pointer items-center whitespace-nowrap gap-2 rounded-[10px] bg-accent px-4.5 text-[15px] font-semibold text-white hover:bg-accent-hover"
-        >
+          className="inline-flex h-11 shrink-0 cursor-pointer items-center whitespace-nowrap gap-2 rounded-[10px] bg-accent px-4.5 text-[15px] font-semibold text-white hover:bg-accent-hover">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
             <path d="M12 5v14M5 12h14" />
