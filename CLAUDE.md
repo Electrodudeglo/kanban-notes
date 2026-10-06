@@ -18,12 +18,12 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - `src/App.jsx` is the root component; it lays out `Header`, `NoteForm` and `Board`, and owns the notes:
   - `notes` state, starting from the saved notes in `localStorage` (key `'notes'`) or the sample `NOTES` array
   - a `useEffect` that saves `notes` to `localStorage` whenever they change
-  - `addNote`, which adds a note to the "To do" column
+  - `addNote(title)`, which adds a note with that title to the "To do" column
   - a `debugMode` flag that clears the saved notes on page load when `true`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box and "New note" button (`onSearch` not wired up yet; `onNewNote` calls `addNote`)
-  - `NoteForm.jsx`: a form with a controlled title input; keeps its own draft `title` state (submitting is in progress)
+  - `NoteForm.jsx`: a form with a controlled title input; keeps its own draft `title` state and calls `onAdd(title)` on submit
   - `Board.jsx`: takes `notes` as a prop; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button and an empty state; notes go in as `children`
   - `NoteCard.jsx`: one note card showing `title` and an optional `body`
@@ -75,6 +75,7 @@ Issues that have come up so far, for the owner to look back on:
 - Use theme tokens (`border-field`, `text-ink`, `focus:border-accent`) instead of raw colors like `border-black`; copy the look of existing components.
 - Every input needs a label (`aria-label` or a `<label>`); a placeholder doesn't count.
 - Remove debug `console.log`s once done.
+- Object shorthand: `{ title }` instead of `{ title: title }` when the key and variable share a name.
 
 ### Progress
 
@@ -82,4 +83,4 @@ Issues that have come up so far, for the owner to look back on:
 2. Notes as data; `.filter()` + `.map()` per column
 3. `useState` and lifting state up to `App`; `addNote`
 4. Saving to `localStorage` with `useEffect`; lazy `useState` initializer
-5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (next), 5c showing the form only after "New note" is clicked
+5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (done), 5c showing the form only after "New note" is clicked
