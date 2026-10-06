@@ -26,16 +26,16 @@ function App() {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
-  function addNote() {
-    const newNote = { id: Date.now(), columnId: 'todo', title: 'addnewnote' };
+  function addNote(title) {
+    const newNote = { id: Date.now(), columnId: 'todo', title };
     setNotes((prev) => [...prev, newNote]);
   }
 
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={addNote} />
-      <NoteForm/>
-      <Board notes={notes} />     
+      <NoteForm onAdd={addNote} />
+      <Board notes={notes} />
     </div>
   );
 }
