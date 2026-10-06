@@ -1,35 +1,31 @@
 import { useState, useEffect } from 'react';
 
-export default function NoteForm({onAdd, onClose}) {
+export default function NoteForm({ onAdd, onClose }) {
   const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
-    e.stopPropagation();
     if (title.trim() === '') {
-      alert('Add Title');
+      alert('Please Add Title');
       return;
-      
-    } else {
-      onAdd(title.trim());
     }
-    setTitle('');
-    onClose();
+    onAdd(title.trim(), body.trim());
   }
 
   useEffect(() => {
     function handleKeyDown(e) {
-      if(e.key == "Escape") {
+      if (e.key === 'Escape') {
         onClose();
       }
     }
-    window.addEventListener("keydown",handleKeyDown);
-    return () => window.removeEventListener("keydown",handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/45 p-4" onClick={onClose}>
-    <form
+      <form
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -40,31 +36,32 @@ export default function NoteForm({onAdd, onClose}) {
         <h2 id="note-dialog-title" className="font-display text-2xl font-semibold text-ink">
           New note
         </h2>
- 
+
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
           Title
           <input
             type="text"
             name="title"
+            autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="What needs doing?"
             className="h-11 rounded-[10px] border border-field bg-white px-3 text-[15px] font-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
-            
           />
         </label>
- 
+
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
           Notes
           <textarea
             name="body"
             rows={4}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
             placeholder="Add a few details…"
             className="resize-y rounded-[10px] border border-field bg-white px-3 py-2.5 text-[15px] font-normal leading-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
-            
           />
         </label>
- 
+
         <div className="mt-1.5 flex items-center justify-end gap-2.5">
           <button
             type="button"
