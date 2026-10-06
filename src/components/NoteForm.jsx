@@ -1,29 +1,86 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function NoteForm({ onAdd }) {
+export default function NoteForm({onAdd, onClose}) {
   const [title, setTitle] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (title.trim() == '') {
+    e.stopPropagation();
+    if (title.trim() === '') {
       alert('Add Title');
+      return;
+      
     } else {
-      onAdd(title);
+      onAdd(title.trim());
     }
     setTitle('');
+    onClose();
   }
 
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if(e.key == "Escape") {
+        onClose();
+      }
+    }
+    window.addEventListener("keydown",handleKeyDown);
+    return () => window.removeEventListener("keydown",handleKeyDown);
+  }, [onClose]);
+
   return (
-    <form className="px-4 md:px-8" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        aria-label="Note title"
-        placeholder="New note"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="h-11 w-full rounded-[10px] border border-field bg-white px-3.5 text-[15px] text-ink outline-none focus:border-accent md:w-70"
-      />
-      <p>{title}</p>
-    </form>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/45 p-4" onClick={onClose}>
+    <form
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="note-dialog-title"
+        className="flex w-full max-w-130 flex-col gap-4.5 rounded-2xl bg-white p-7 shadow-[0_24px_60px_rgba(30,28,24,0.3)]"
+        onSubmit={handleSubmit}
+      >
+        <h2 id="note-dialog-title" className="font-display text-2xl font-semibold text-ink">
+          New note
+        </h2>
+ 
+        <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
+          Title
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="What needs doing?"
+            className="h-11 rounded-[10px] border border-field bg-white px-3 text-[15px] font-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
+            
+          />
+        </label>
+ 
+        <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
+          Notes
+          <textarea
+            name="body"
+            rows={4}
+            placeholder="Add a few details…"
+            className="resize-y rounded-[10px] border border-field bg-white px-3 py-2.5 text-[15px] font-normal leading-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
+            
+          />
+        </label>
+ 
+        <div className="mt-1.5 flex items-center justify-end gap-2.5">
+          <button
+            type="button"
+            className="h-11 cursor-pointer rounded-[10px] border border-field bg-white px-4.5 text-[15px] font-medium text-ink hover:bg-page"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="h-11 cursor-pointer rounded-[10px] bg-accent px-5 text-[15px] font-semibold text-white hover:bg-accent-hover"
+          >
+            Save note
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
