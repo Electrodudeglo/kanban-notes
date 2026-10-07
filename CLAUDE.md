@@ -85,4 +85,6 @@ Issues that have come up so far, for the owner to look back on:
 3. `useState` and lifting state up to `App`; `addNote`
 4. Saving to `localStorage` with `useEffect`; lazy `useState` initializer
 5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (done), 5c showing the form as a modal only after "New note" is clicked (done)
-6. Deleting a note (next)
+6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
+7. Editing a note (next): 7a `updateNote` with `.map()`, 7b opening a note for editing, 7c reusing `NoteForm` for edits
+8. Moving notes between columns with drag and drop (dnd-kit)
