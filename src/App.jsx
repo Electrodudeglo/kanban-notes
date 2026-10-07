@@ -34,11 +34,15 @@ function App() {
     setIsAdding(false);
   }
 
+  function deleteNote(id) {
+    setNotes((prev) => prev.filter((note) => note.id !== id));
+  }
+
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={() => setIsAdding(true)} />
       {isAdding && <NoteForm onAdd={addNote} onClose={() => setIsAdding(false)} />}
-      <Board notes={notes} />
+      <Board notes={notes} onRemove={deleteNote} />
     </div>
   );
 }
