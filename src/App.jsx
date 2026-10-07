@@ -38,11 +38,21 @@ function App() {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   }
 
+  function updateNote(id, title, body) { 
+    const [editingId, setEditingId] = useState(null);
+    
+    setNotes((prev) =>
+      prev.map((note) => (note.id === id ? { ...note, title, body } : note))
+    );
+    
+  }
+
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={() => setIsAdding(true)} />
       {isAdding && <NoteForm onAdd={addNote} onClose={() => setIsAdding(false)} />}
-      <Board notes={notes} onRemove={deleteNote} />
+      <Board notes={notes} onRemove={deleteNote} onEdit={updateNote} />
+      
     </div>
   );
 }
