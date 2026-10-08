@@ -24,6 +24,11 @@ function App() {
 
   const [isAdding, setIsAdding] = useState(false);
 
+  const [editId, setEditId] = useState(null);
+
+  const EditNote = notes.find((note) => note.id === editId);
+
+
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
@@ -38,21 +43,17 @@ function App() {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   }
 
-  function updateNote(id, title, body) { 
-    const [editingId, setEditingId] = useState(null);
-    
-    setNotes((prev) =>
-      prev.map((note) => (note.id === id ? { ...note, title, body } : note))
-    );
-    
-  }
 
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={() => setIsAdding(true)} />
       {isAdding && <NoteForm onAdd={addNote} onClose={() => setIsAdding(false)} />}
-      <Board notes={notes} onRemove={deleteNote} onEdit={updateNote} />
-      
+      <Board notes={notes} onRemove={deleteNote} />
+
+      {notes.map((note) => (<button key = {note.id} onClick={() => setEditId(note.id)}>{note.title}</button>))}
+
+      {EditNote && <p>You Picked {EditNote.title}</p>}
+
     </div>
   );
 }
