@@ -20,7 +20,7 @@ export default function Board({ notes, onRemove, onEdit }) {
           // `key` helps React track list items between renders — always use a stable id.
           <Column key={column.id} title={column.title} color={column.color} count={columnNotes.length}>
             {columnNotes.map((note) => (
-              <NoteCard key={note.id} title={note.title} body={note.body} onRemove={() => onRemove(note.id)} onEdit={() => onEdit(note.id)} />
+              <NoteCard key={note.id} title={note.title} body={note.body} onRemove={() => onRemove(note.id)}/>
             ))}
           </Column>
         );
