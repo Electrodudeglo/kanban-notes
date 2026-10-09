@@ -17,17 +17,19 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 
 - `src/App.jsx` is the root component; it lays out `Header`, `NoteForm` and `Board`, and owns the notes:
   - `isAdding` state; `NoteForm` is only rendered while it's `true`
+  - `editId` state (the id of the note being edited, or `null`) and `editingNote`, the note found from it with `.find()`
   - `notes` state, starting from the saved notes in `localStorage` (key `'notes'`) or the sample `NOTES` array
   - a `useEffect` that saves `notes` to `localStorage` whenever they change
   - `addNote(title, body)`, which adds a note to the "To do" column and closes the form
+  - `deleteNote(id)`, which removes a note with `.filter()`
   - a `debugMode` flag that clears the saved notes on page load when `true`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box and "New note" button (`onSearch` not wired up yet; `onNewNote` opens the note form)
   - `NoteForm.jsx`: a modal dialog with controlled title and body fields; keeps its own draft state, calls `onAdd(title, body)` on submit and `onClose` on Cancel, Escape or a click outside
-  - `Board.jsx`: takes `notes` as a prop; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
+  - `Board.jsx`: takes `notes`, `onRemove` and `onEdit` as props, and gives each card its own `onRemove`/`onEdit` with the note's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button and an empty state; notes go in as `children`
-  - `NoteCard.jsx`: one note card showing `title` and an optional `body`
+  - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
 - `src/index.css` holds the Google Fonts import, the Tailwind import, design tokens in `@theme` (colors such as `bg-page` and `text-accent`, plus `font-display`) and base body styles
 - `public/` holds static files (favicon, `productivity-pattern.svg`, which is currently unused)
 
@@ -86,5 +88,5 @@ Issues that have come up so far, for the owner to look back on:
 4. Saving to `localStorage` with `useEffect`; lazy `useState` initializer
 5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (done), 5c showing the form as a modal only after "New note" is clicked (done)
 6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
-7. Editing a note (next): 7a `updateNote` with `.map()`, 7b opening a note for editing, 7c reusing `NoteForm` for edits
+7. Editing a note (in progress): 7a `updateNote` with `.map()` (not started), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits
 8. Moving notes between columns with drag and drop (dnd-kit)
