@@ -42,6 +42,12 @@ function App() {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   }
 
+  function updateNote(id, newTitle, newBody) {
+    setNotes((prev) =>
+      prev.map((note) => (note.id === id ? { ...note, title: newTitle, body: newBody } : note))
+    );
+  }
+
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={() => setIsAdding(true)} />

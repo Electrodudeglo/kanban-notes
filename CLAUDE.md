@@ -22,6 +22,7 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
   - a `useEffect` that saves `notes` to `localStorage` whenever they change
   - `addNote(title, body)`, which adds a note to the "To do" column and closes the form
   - `deleteNote(id)`, which removes a note with `.filter()`
+  - `updateNote(id, newTitle, newBody)`, which replaces a note's title and body with `.map()`
   - a `debugMode` flag that clears the saved notes on page load when `true`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
@@ -88,5 +89,5 @@ Issues that have come up so far, for the owner to look back on:
 4. Saving to `localStorage` with `useEffect`; lazy `useState` initializer
 5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (done), 5c showing the form as a modal only after "New note" is clicked (done)
 6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
-7. Editing a note (in progress): 7a `updateNote` with `.map()` (not started), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits
+7. Editing a note (in progress): 7a `updateNote` with `.map()` (done), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits
 8. Moving notes between columns with drag and drop (dnd-kit)
