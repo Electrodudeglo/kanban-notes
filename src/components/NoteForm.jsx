@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-export default function NoteForm({ onAdd, onClose }) {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+export default function NoteForm({ initialTitle = '', initialBody = '', onSave, onClose }) {
+  const [title, setTitle] = useState(initialTitle);
+  const [body, setBody] = useState(initialBody);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -10,7 +10,7 @@ export default function NoteForm({ onAdd, onClose }) {
       alert('Please Add Title');
       return;
     }
-    onAdd(title.trim(), body.trim());
+    onSave(title.trim(), body.trim());
   }
 
   useEffect(() => {
