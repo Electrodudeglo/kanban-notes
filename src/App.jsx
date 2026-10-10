@@ -10,6 +10,17 @@ const NOTES = [
   { id: 2, columnId: 'todo', title: 'Call the bank' },
   { id: 3, columnId: 'in-progress', title: 'Learn React props' },
   { id: 4, columnId: 'done', title: 'Set up the project', body: 'Vite + Tailwind' },
+
+  // New rows
+  { id: 5, columnId: 'todo', title: 'Clean the kitchen', body: 'Wipe counters, mop floor' },
+  { id: 6, columnId: 'todo', title: 'Book dentist appointment' },
+  { id: 7, columnId: 'in-progress', title: 'Write README for project' },
+  { id: 8, columnId: 'in-progress', title: 'Refactor NoteCard component' },
+  { id: 9, columnId: 'done', title: 'Install Node & Vite' },
+  { id: 10, columnId: 'done', title: 'Create GitHub repo', body: 'Initial commit pushed' },
+  { id: 11, columnId: 'todo', title: 'Plan weekend tasks' },
+  { id: 12, columnId: 'in-progress', title: 'Study React conditional rendering' },
+  { id: 13, columnId: 'done', title: 'Fix localStorage sync bug' },
 ];
 
 // Runs once when this file loads, so every page refresh starts from NOTES.
@@ -46,14 +57,29 @@ function App() {
     setNotes((prev) =>
       prev.map((note) => (note.id === id ? { ...note, title: newTitle, body: newBody } : note))
     );
+    setEditId(null);
   }
 
   return (
     <div className="flex min-h-full flex-col">
       <Header onNewNote={() => setIsAdding(true)} />
-      {isAdding && <NoteForm onAdd={addNote} onClose={() => setIsAdding(false)} />}
+      {isAdding && (
+        <NoteForm
+          initialTitle=""
+          initialBody=""
+          onSave={addNote}
+          onClose={() => setIsAdding(false)}
+        />
+      )}
+      {editingNote && (
+        <NoteForm
+          initialTitle={editingNote.title}
+          initialBody={editingNote.body}
+          onSave={(title, body) => updateNote(editId, title, body)}
+          onClose={() => setEditId(null)}
+        />
+      )}
       <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} />
-      {editingNote && <p>Editing: {editingNote.title}</p>}
     </div>
   );
 }
