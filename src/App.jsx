@@ -65,10 +65,9 @@ function App() {
       <Header onNewNote={() => setIsAdding(true)} />
       {isAdding && (
         <NoteForm
-          initialTitle=""
-          initialBody=""
           onSave={addNote}
           onClose={() => setIsAdding(false)}
+          formTitle='New Note'
         />
       )}
       {editingNote && (
@@ -77,6 +76,7 @@ function App() {
           initialBody={editingNote.body}
           onSave={(title, body) => updateNote(editId, title, body)}
           onClose={() => setEditId(null)}
+          formTitle='Edit Note'
         />
       )}
       <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} />
