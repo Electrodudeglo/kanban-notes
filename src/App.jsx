@@ -79,7 +79,7 @@ function App() {
           formTitle='Edit Note'
         />
       )}
-      <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} />
+      <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} addNote={() => setIsAdding(true)} />
     </div>
   );
 }
