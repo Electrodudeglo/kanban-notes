@@ -96,8 +96,6 @@ Issues that have come up so far, for the owner to look back on:
 5. Typing a real title: 5a controlled input in `NoteForm` (done), 5b submitting the form (done), 5c showing the form as a modal only after "New note" is clicked (done)
 6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
 7. Editing a note: 7a `updateNote` with `.map()` (done), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits (done)
-8. Self-study (in progress): the owner reads through the code and refactors or changes things on their own. Small pieces for the owner to do:
-   - Add a `heading` prop to `NoteForm` so the edit form says "Edit note" instead of "New note"
-   - Remove the now-unneeded `initialTitle=""` and `initialBody=""` from the adding form in `App`
-   - Wire up each column's "+" button (`onAddNote` in `Column`) so it adds a note to that column, not always to "To do"
-9. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
+8. Column "+" buttons (in progress): 8a get back to a working state (no hard-coded column in `NoteForm`, `columnId` spelling, one adding form), 8b replace `isAdding` with state that remembers which column you're adding to, 8c pass that column to `addNote` from `App`'s `onSave` arrow, 8d wire each column's "+" button through `Board`
+9. Self-study: the owner reads through the code and refactors or changes things on their own
+10. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
