@@ -33,20 +33,21 @@ function App() {
     return JSON.parse(localStorage.getItem('notes')) ?? NOTES;
   });
 
-  const [isAdding, setIsAdding] = useState(false);
-
   const [editId, setEditId] = useState(null);
+
+  const [addingTo, setAddingTo] = useState(null);
 
   const editingNote = notes.find((note) => note.id === editId);
 
+  
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
-  function addNote(title, body) {
-    const newNote = { id: Date.now(), columnId: 'todo', title, body };
+  function addNote(columnId, title, body) {
+    const newNote = { id: Date.now(), columnId, title, body };
     setNotes((prev) => [...prev, newNote]);
-    setIsAdding(false);
+    setAddingTo(null);
   }
 
   function deleteNote(id) {
@@ -62,11 +63,11 @@ function App() {
 
   return (
     <div className="flex min-h-full flex-col">
-      <Header onNewNote={() => setIsAdding(true)} />
-      {isAdding && (
+      <Header onNewNote={() => setAddingTo('todo')} />
+      {addingTo && (
         <NoteForm
-          onSave={addNote}
-          onClose={() => setIsAdding(false)}
+          onSave={(title,body) => addNote(addingTo,title,body)}
+          onClose={() => setAddingTo(null)}
           formTitle='New Note'
         />
       )}
@@ -79,7 +80,7 @@ function App() {
           formTitle='Edit Note'
         />
       )}
-      <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} addNote={() => setIsAdding(true)} />
+      <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} addNote={() => setAddingTo('todo')} />
     </div>
   );
 }
