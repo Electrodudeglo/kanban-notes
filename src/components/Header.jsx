@@ -1,6 +1,6 @@
 // Top bar: logo + title, search box, "New note" button.
 // onSearch and onNewNote are optional props you'll wire up later.
-export default function Header({ onSearch, onNewNote }) {
+export default function Header({ onSearch, onNewNote, onDataReset }) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-6 border-b border-line px-4 py-4 md:px-8 md:py-5">
       <div className="flex items-center gap-2.5 text-accent">
@@ -13,6 +13,15 @@ export default function Header({ onSearch, onNewNote }) {
         <h1 className="font-display text-[26px] font-semibold tracking-tight text-ink">
           Kanban Notes
         </h1>
+      </div>
+
+      <div>
+        <button className="cursor-pointer border rounded-xl bg-accent p-2 text-white font-bold hover:bg-accent-hover"
+         type="button"
+         onClick={onDataReset}
+         >
+          Reset Data
+          </button>
       </div>
 
       <div className="flex w-full items-center gap-3 md:w-auto">
