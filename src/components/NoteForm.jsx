@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-export default function NoteForm({ onAdd, onClose }) {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+export default function NoteForm({ formTitle, initialTitle = '', initialBody = '', onSave, onClose }) {
+  const [title, setTitle] = useState(initialTitle);
+  const [body, setBody] = useState(initialBody);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -10,7 +10,7 @@ export default function NoteForm({ onAdd, onClose }) {
       alert('Please Add Title');
       return;
     }
-    onAdd(title.trim(), body.trim());
+    onSave(title.trim(), body.trim());
   }
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function NoteForm({ onAdd, onClose }) {
         onSubmit={handleSubmit}
       >
         <h2 id="note-dialog-title" className="font-display text-2xl font-semibold text-ink">
-          New note
+          {formTitle}
         </h2>
 
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
