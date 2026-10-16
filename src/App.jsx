@@ -39,7 +39,6 @@ function App() {
 
   const editingNote = notes.find((note) => note.id === editId);
 
-  
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
@@ -66,9 +65,9 @@ function App() {
       <Header onNewNote={() => setAddingTo('todo')} />
       {addingTo && (
         <NoteForm
-          onSave={(title,body) => addNote(addingTo,title,body)}
+          onSave={(title, body) => addNote(addingTo, title, body)}
           onClose={() => setAddingTo(null)}
-          formTitle='New Note'
+          formTitle="New Note"
         />
       )}
       {editingNote && (
@@ -77,10 +76,15 @@ function App() {
           initialBody={editingNote.body}
           onSave={(title, body) => updateNote(editId, title, body)}
           onClose={() => setEditId(null)}
-          formTitle='Edit Note'
+          formTitle="Edit Note"
         />
       )}
-      <Board notes={notes} onRemove={deleteNote} onEdit={setEditId} addNote={() => setAddingTo('todo')} />
+      <Board
+        notes={notes}
+        onRemove={deleteNote}
+        onEdit={setEditId}
+        onAddNote={setAddingTo}
+      />
     </div>
   );
 }
