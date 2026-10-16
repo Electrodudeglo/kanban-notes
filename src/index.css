@@ -14,6 +14,11 @@
   --color-accent: #2F5D50;
   --color-accent-hover: #244A40;
 
+  /* Column colors; keep in sync with COLUMNS in Board.jsx */
+  --color-col-todo: #8A847A;
+  --color-col-in-progress: #C07A2C;
+  --color-col-done: #2F5D50;
+
   --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
 }
