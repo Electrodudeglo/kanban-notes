@@ -27,11 +27,11 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box and "New note" button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do")
-  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`), keeps its own draft state, calls `onSave(title, body)` on submit and `onClose` on Cancel, Escape or a click outside
+  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, controlled by `colSelection` state (not sent through `onSave` yet: step 10b)
   - `Board.jsx`: takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state; notes go in as `children`
   - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
-- `src/index.css` holds the Google Fonts import, the Tailwind import, design tokens in `@theme` (colors such as `bg-page` and `text-accent`, plus `font-display`) and base body styles
+- `src/index.css` holds the Google Fonts import, the Tailwind import, design tokens in `@theme` (colors such as `bg-page` and `text-accent`, column colors `col-todo`/`col-in-progress`/`col-done` that copy the hex values in `COLUMNS`, plus `font-display`) and base body styles
 - `public/` holds static files (favicon, `productivity-pattern.svg`, which is currently unused)
 
 ## Conventions
@@ -97,5 +97,6 @@ Issues that have come up so far, for the owner to look back on:
 6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
 7. Editing a note: 7a `updateNote` with `.map()` (done), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits (done)
 8. Column "+" buttons: 8a back to a working state (done), 8b `addingTo` state replacing `isAdding` (done), 8c passing the column to `addNote` from `App`'s `onSave` arrow (done), 8d wiring each column's "+" button through `Board` (done)
-9. Self-study (next): the owner reads through the code and refactors or changes things on their own
-10. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
+9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
+10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (next), 10c moving a note to another column when editing, 10d rendering the radios from `COLUMNS` with `.map()`
+11. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
