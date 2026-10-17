@@ -71,6 +71,7 @@ function App() {
           onSave={(title, body) => addNote(addingTo, title, body)}
           onClose={() => setAddingTo(null)}
           formTitle="New Note"
+          initialColId={addingTo}
         />
       )}
       {editingNote && (
@@ -78,6 +79,7 @@ function App() {
           initialTitle={editingNote.title}
           initialBody={editingNote.body}
           onSave={(title, body) => updateNote(editId, title, body)}
+          initialColId={editingNote.columnId}
           onClose={() => setEditId(null)}
           formTitle="Edit Note"
         />
