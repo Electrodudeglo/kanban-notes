@@ -31,15 +31,13 @@ function App() {
   const [editId, setEditId] = useState(null);
 
   const [addingTo, setAddingTo] = useState(null);
-  
-  const editingNote = notes.find((note) => note.id === editId);
 
+  const editingNote = notes.find((note) => note.id === editId);
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
- 
   function addNote(columnId, title, body) {
     const newNote = { id: Date.now(), columnId, title, body };
     setNotes((prev) => [...prev, newNote]);
@@ -50,17 +48,19 @@ function App() {
     setNotes((prev) => prev.filter((note) => note.id !== id));
   }
 
-  function updateNote(id, newTitle, newBody) {
+  function updateNote(id, colId, newTitle, newBody) {
     setNotes((prev) =>
-      prev.map((note) => (note.id === id ? { ...note, title: newTitle, body: newBody } : note))
+      prev.map((note) =>
+        note.id === id ? { ...note, columnId: colId, title: newTitle, body: newBody } : note
+      )
     );
     setEditId(null);
   }
 
-  //Delete this when finishing everything
+  // Delete this when finishing everything
   function resetData() {
-     localStorage.removeItem('notes');
-     window.location.reload(true)
+    localStorage.removeItem('notes');
+    window.location.reload();
   }
 
   return (
@@ -68,7 +68,7 @@ function App() {
       <Header onNewNote={() => setAddingTo('todo')} onDataReset={resetData} />
       {addingTo && (
         <NoteForm
-          onSave={(title, body) => addNote(addingTo, title, body)}
+          onSave={addNote}
           onClose={() => setAddingTo(null)}
           formTitle="New Note"
           initialColId={addingTo}
@@ -78,7 +78,7 @@ function App() {
         <NoteForm
           initialTitle={editingNote.title}
           initialBody={editingNote.body}
-          onSave={(title, body) => updateNote(editId, title, body)}
+          onSave={(columnId, title, body) => updateNote(editId, columnId, title, body)}
           initialColId={editingNote.columnId}
           onClose={() => setEditId(null)}
           formTitle="Edit Note"
