@@ -11,7 +11,7 @@ export default function NoteForm({ formTitle, initialColId = 'todo', initialTitl
       alert('Please Add Title');
       return;
     }
-    onSave(title.trim(), body.trim());
+    onSave(colSelection, title.trim(), body.trim());
   }
 
   useEffect(() => {
