@@ -100,5 +100,5 @@ Issues that have come up so far, for the owner to look back on:
 7. Editing a note: 7a `updateNote` with `.map()` (done), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits (done)
 8. Column "+" buttons: 8a back to a working state (done), 8b `addingTo` state replacing `isAdding` (done), 8c passing the column to `addNote` from `App`'s `onSave` arrow (done), 8d wiring each column's "+" button through `Board` (done)
 9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
-10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (next)
-11. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
+10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
+11. Self-study (current)
