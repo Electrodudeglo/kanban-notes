@@ -1,13 +1,6 @@
 import Column from './Column';
 import NoteCard from './NoteCard';
-
-// The three columns are plain data. Rendering them with .map() means
-// adding a column later is a one-line change here, not new markup.
-const COLUMNS = [
-  { id: 'todo', title: 'To do', color: '#8A847A' },
-  { id: 'in-progress', title: 'In progress', color: '#C07A2C' },
-  { id: 'done', title: 'Done', color: '#2F5D50' },
-];
+import { COLUMNS } from '../columns';
 
 export default function Board({ notes, onRemove, onEdit, onAddNote }) {
   return (
