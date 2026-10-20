@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Board from './components/Board';
 import NoteForm from './components/NoteForm';
-
+import { COLUMNS } from './columns';
 
 const NOTES = [
   { id: 1, columnId: 'todo', title: 'Buy groceries', body: 'Milk, eggs, bread' },
@@ -22,10 +22,13 @@ const NOTES = [
   { id: 13, columnId: 'done', title: 'Fix localStorage sync bug' },
 ];
 
-
 function App() {
   const [notes, setNotes] = useState(() => {
-    return JSON.parse(localStorage.getItem('notes')) ?? NOTES;
+    const savedNotes = JSON.parse(localStorage.getItem('notes')) ?? NOTES;
+    return savedNotes.filter((note) =>
+      COLUMNS.some((column) => note.columnId === column.id)
+    );
+    
   });
 
   const [editId, setEditId] = useState(null);
