@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { COLUMNS } from '../columns';
 
-export default function NoteForm({ formTitle, initialTitle = '', initialBody = '', onSave, onClose }) {
+export default function NoteForm({ formTitle, initialColId = 'todo', initialTitle = '', initialBody = '', onSave, onClose }) {
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
+  const [colSelection, setColSelection] = useState(initialColId);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -10,7 +12,7 @@ export default function NoteForm({ formTitle, initialTitle = '', initialBody = '
       alert('Please Add Title');
       return;
     }
-    onSave(title.trim(), body.trim());
+    onSave(colSelection, title.trim(), body.trim());
   }
 
   useEffect(() => {
@@ -40,18 +42,22 @@ export default function NoteForm({ formTitle, initialTitle = '', initialBody = '
         <fieldset className="flex flex-col gap-1.5">
           <legend className="mb-1.5 text-[13px] font-semibold text-ink">Column</legend>
           <div className="flex flex-wrap gap-2">
-            <label className="flex h-9 cursor-pointer items-center gap-2 rounded-full border border-field px-3.5 text-[14px] text-ink hover:bg-page has-checked:border-col-todo has-checked:bg-col-todo/10">
-              <input type="radio" name="column_select" className="size-4 accent-col-todo" />
-              To do
-            </label>
-            <label className="flex h-9 cursor-pointer items-center gap-2 rounded-full border border-field px-3.5 text-[14px] text-ink hover:bg-page has-checked:border-col-in-progress has-checked:bg-col-in-progress/10">
-              <input type="radio" name="column_select" className="size-4 accent-col-in-progress" />
-              In progress
-            </label>
-            <label className="flex h-9 cursor-pointer items-center gap-2 rounded-full border border-field px-3.5 text-[14px] text-ink hover:bg-page has-checked:border-col-done has-checked:bg-col-done/10">
-              <input type="radio" name="column_select" className="size-4 accent-col-done" />
-              Done
-            </label>
+            {COLUMNS.map((column) => (
+              <label
+                key={column.id}
+                style={{ '--col': column.color }}
+                className="flex h-9 cursor-pointer items-center gap-2 rounded-full border border-field px-3.5 text-[14px] text-ink hover:bg-page has-checked:border-(--col) has-checked:bg-(--col)/10"
+              >
+                <input
+                  type="radio"
+                  name="column-select"
+                  className="size-4 accent-(--col)"
+                  onChange={() => setColSelection(column.id)}
+                  checked={colSelection === column.id}
+                />
+                {column.title}
+              </label>
+            ))}
           </div>
         </fieldset>
 

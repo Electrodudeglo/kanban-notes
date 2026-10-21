@@ -22,12 +22,14 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
   - a `useEffect` that saves `notes` to `localStorage` whenever they change
   - `addNote(columnId, title, body)`, which adds a note to that column and closes the form
   - `deleteNote(id)`, which removes a note with `.filter()`
-  - `updateNote(id, newTitle, newBody)`, which replaces a note's title and body with `.map()` and closes the edit form
+  - `updateNote(id, colId, newTitle, newBody)`, which replaces a note's column, title and body with `.map()` and closes the edit form
   - a `debugMode` flag that clears the saved notes on page load when `true`
+  - `resetData()`, a temporary helper behind the header's reset button that clears the saved notes and reloads the page
+- `src/columns.js` exports `COLUMNS`, the list of columns (`{ id, title, color }`) used by both `Board` and `NoteForm`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
-  - `Header.jsx`: logo, title, search box and "New note" button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do")
-  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`), keeps its own draft state, calls `onSave(title, body)` on submit and `onClose` on Cancel, Escape or a click outside
+  - `Header.jsx`: logo, title, search box, "New note" button and a temporary reset button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do"; `onDataReset` calls `resetData`)
+  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(columnId, title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, built from `COLUMNS` with `.map()` and controlled by `colSelection` state
   - `Board.jsx`: takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state; notes go in as `children`
   - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
@@ -97,5 +99,6 @@ Issues that have come up so far, for the owner to look back on:
 6. Deleting a note: 6a `deleteNote` with `.filter()` (done), 6b passing it down through `Board` to the card's `x` button (done)
 7. Editing a note: 7a `updateNote` with `.map()` (done), 7b opening a note for editing (done), 7c reusing `NoteForm` for edits (done)
 8. Column "+" buttons: 8a back to a working state (done), 8b `addingTo` state replacing `isAdding` (done), 8c passing the column to `addNote` from `App`'s `onSave` arrow (done), 8d wiring each column's "+" button through `Board` (done)
-9. Self-study (next): the owner reads through the code and refactors or changes things on their own
-10. Not decided yet (one option: moving notes between columns with drag and drop, using dnd-kit)
+9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
+10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
+11. Self-study (current)
