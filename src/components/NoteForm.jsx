@@ -6,16 +6,11 @@ export default function NoteForm({ formTitle, initialColId = 'todo', initialTitl
   const [body, setBody] = useState(initialBody);
   const [colSelection, setColSelection] = useState(initialColId);
   const [inputError, setInputError] = useState(false);
-  
 
   function handleSubmit(e) {
     e.preventDefault();
     if (title.trim() === '') {
-
-      setInputError(true)
-
-      console.log(inputError)
-
+      setInputError(true);
       return;
     }
     onSave(colSelection, title.trim(), body.trim());
@@ -74,11 +69,15 @@ export default function NoteForm({ formTitle, initialColId = 'todo', initialTitl
             name="title"
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setInputError(false);
+            }}
             placeholder="What needs doing?"
-            className="h-11 rounded-[10px] border border-field bg-white px-3 text-[15px] font-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
+            aria-invalid={inputError}
+            className="h-11 rounded-[10px] border border-field bg-white px-3 text-[15px] font-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15 aria-invalid:border-danger aria-invalid:focus:ring-danger/15"
           />
-          {inputError && (<p className="text-xs text-red-500 ml-2">Please add a title</p>)}
+          {inputError && <p className="text-[13px] font-normal text-danger">Please add a title</p>}
         </label>
 
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
