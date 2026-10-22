@@ -5,11 +5,17 @@ export default function NoteForm({ formTitle, initialColId = 'todo', initialTitl
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
   const [colSelection, setColSelection] = useState(initialColId);
+  const [inputError, setInputError] = useState(false);
+  
 
   function handleSubmit(e) {
     e.preventDefault();
     if (title.trim() === '') {
-      alert('Please Add Title');
+
+      setInputError(true)
+
+      console.log(inputError)
+
       return;
     }
     onSave(colSelection, title.trim(), body.trim());
@@ -72,6 +78,7 @@ export default function NoteForm({ formTitle, initialColId = 'todo', initialTitl
             placeholder="What needs doing?"
             className="h-11 rounded-[10px] border border-field bg-white px-3 text-[15px] font-normal text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15"
           />
+          {inputError && (<p className="text-xs text-red-500 ml-2">Please add a title</p>)}
         </label>
 
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold text-ink">
