@@ -28,7 +28,6 @@ function App() {
     return savedNotes.filter((note) =>
       COLUMNS.some((column) => note.columnId === column.id)
     );
-    
   });
 
   const [editId, setEditId] = useState(null);
