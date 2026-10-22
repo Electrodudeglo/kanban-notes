@@ -18,18 +18,17 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - `src/App.jsx` is the root component; it lays out `Header`, `NoteForm` and `Board`, and owns the notes:
   - `addingTo` state (the column id a new note goes to, or `null`); the adding `NoteForm` is only rendered while it's set
   - `editId` state (the id of the note being edited, or `null`) and `editingNote`, the note found from it with `.find()`; a second `NoteForm` is rendered while `editingNote` exists
-  - `notes` state, starting from the saved notes in `localStorage` (key `'notes'`) or the sample `NOTES` array
+  - `notes` state, starting from the saved notes in `localStorage` (key `'notes'`) or the sample `NOTES` array, with notes whose column is no longer in `COLUMNS` filtered out (`.filter()` + `.some()`)
   - a `useEffect` that saves `notes` to `localStorage` whenever they change
   - `addNote(columnId, title, body)`, which adds a note to that column and closes the form
   - `deleteNote(id)`, which removes a note with `.filter()`
   - `updateNote(id, colId, newTitle, newBody)`, which replaces a note's column, title and body with `.map()` and closes the edit form
-  - a `debugMode` flag that clears the saved notes on page load when `true`
   - `resetData()`, a temporary helper behind the header's reset button that clears the saved notes and reloads the page
-- `src/columns.js` exports `COLUMNS`, the list of columns (`{ id, title, color }`) used by both `Board` and `NoteForm`
+- `src/columns.js` exports `COLUMNS`, the list of columns (`{ id, title, color }`) used by `App`, `Board` and `NoteForm`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box, "New note" button and a temporary reset button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do"; `onDataReset` calls `resetData`)
-  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(columnId, title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, built from `COLUMNS` with `.map()` and controlled by `colSelection` state
+  - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(columnId, title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, built from `COLUMNS` with `.map()` and controlled by `colSelection` state; an empty title sets `inputError`, which shows a red message under the Title field until the title is edited
   - `Board.jsx`: takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state; notes go in as `children`
   - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
