@@ -29,9 +29,9 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box, "New note" button and a temporary reset button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do"; `onDataReset` calls `resetData`)
   - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(columnId, title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, built from `COLUMNS` with `.map()` and controlled by `colSelection` state; an empty title sets `inputError`, which shows a red message under the Title field until the title is edited
-  - `Board.jsx`: takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
+  - `Board.jsx`: wraps the board in one dnd-kit `DndContext` (`onDragEnd` only logs for now); takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
   - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state; notes go in as `children`
-  - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
+  - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`); draggable with `useDraggable` using its `id` prop
 - `src/index.css` holds the Google Fonts import, the Tailwind import, design tokens in `@theme` (colors such as `bg-page` and `text-accent`, plus `font-display`) and base body styles
 - `public/` holds static files (favicon, `productivity-pattern.svg`, which is currently unused)
 
@@ -41,7 +41,7 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - Add new colors and fonts as tokens in `@theme` in `src/index.css`, and use the generated utilities rather than hex values in components. Use inline styles only for values that come from data at runtime (e.g. column dot colors).
 - Fonts: IBM Plex Sans for body text (`font-sans`) and Fraunces for headings (`font-display`).
 - Light mode only; dark mode is disabled for now.
-- Drag and drop uses dnd-kit (`@dnd-kit/core`, `@dnd-kit/sortable`).
+- Drag and drop uses dnd-kit (`@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`; already installed).
 
 ## Rules
 
@@ -100,4 +100,6 @@ Issues that have come up so far, for the owner to look back on:
 8. Column "+" buttons: 8a back to a working state (done), 8b `addingTo` state replacing `isAdding` (done), 8c passing the column to `addNote` from `App`'s `onSave` arrow (done), 8d wiring each column's "+" button through `Board` (done)
 9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
 10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
-11. Self-study (current)
+11. Self-study (done): error message instead of `alert` in `NoteForm`
+12. Moving cards between columns with dnd-kit: 12a `DndContext` in `Board` and `useDraggable` on `NoteCard` (done), 12b `useDroppable` on `Column` and an `onDragEnd` that moves the note to the column it was dropped on (next), 12c polish: a `DragOverlay` so cards aren't clipped by the column, and a sensor activation distance so the card's edit/delete buttons still click, 12d (optional) reordering cards within a column with `@dnd-kit/sortable`
+13. Searching notes from the header's search box: 13a a `searchQuery` state in `App` wired to `onSearch`, 13b filtering the notes passed to `Board` (derived from state, not stored), 13c case-insensitive matching on title and body, plus a "no matches" state
