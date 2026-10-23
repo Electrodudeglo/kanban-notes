@@ -59,6 +59,12 @@ function App() {
     setEditId(null);
   }
 
+  function moveNote(noteId, columnId) {
+
+
+
+  }
+
   // Delete this when finishing everything
   function resetData() {
     localStorage.removeItem('notes');
@@ -91,6 +97,7 @@ function App() {
         onRemove={deleteNote}
         onEdit={setEditId}
         onAddNote={setAddingTo}
+        onMoveNote={moveNote}
       />
     </div>
   );

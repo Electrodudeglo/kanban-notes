@@ -3,7 +3,7 @@ import NoteCard from './NoteCard';
 import { COLUMNS } from '../columns';
 import { DndContext } from '@dnd-kit/core';
 
-export default function Board({ notes, onRemove, onEdit, onAddNote }) {
+export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }) {
   return (
     <DndContext onDragEnd={(event) => console.log(event.active.id)}>
       <main className="grid flex-1 grid-cols-1 gap-5 p-4 md:grid-cols-3 md:px-8 md:pt-6 md:pb-8">
