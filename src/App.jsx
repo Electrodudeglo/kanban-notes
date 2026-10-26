@@ -60,9 +60,9 @@ function App() {
   }
 
   function moveNote(noteId, columnId) {
-
-
-
+    setNotes((prev) =>
+      prev.map((note) => (note.id === noteId ? { ...note, columnId } : note))
+    );
   }
 
   // Delete this when finishing everything
