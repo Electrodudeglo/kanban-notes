@@ -4,8 +4,16 @@ import { COLUMNS } from '../columns';
 import { DndContext } from '@dnd-kit/core';
 
 export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }) {
+  function handleDrag(event) {
+    if (!event.over) {
+      return; // dropped outside every zone
+    }
+
+    onMoveNote(event.active.id, event.over.id);
+  }
+
   return (
-    <DndContext onDragEnd={(event) => console.log(event.active.id)}>
+    <DndContext onDragEnd={handleDrag}>
       <main className="grid flex-1 grid-cols-1 gap-5 p-4 md:grid-cols-3 md:px-8 md:pt-6 md:pb-8">
         {COLUMNS.map((column) => {
           // Keep only the notes whose columnId matches this column's id.
@@ -19,6 +27,7 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
               color={column.color}
               count={columnNotes.length}
               onAddNote={() => onAddNote(column.id)}
+              id={column.id}
             >
               {columnNotes.map((note) => (
                 <NoteCard
