@@ -119,7 +119,7 @@ Issues that have come up so far, for the owner to look back on:
 
 Keep entries short (one line each). Tick them off as they are fixed.
 
-- [ ] Push `NoteCardPreview.jsx` and the matching `Board`/`NoteCard` changes (the 12c work) from the other laptop; this laptop's `Board` has no `DragOverlay`, `activeId` or sensors. Then add `NoteCardPreview` to Project structure.
+- [x] Push `NoteCardPreview.jsx` and the matching `Board`/`NoteCard` changes (the 12c work) from the other laptop; then add `NoteCardPreview` to Project structure.
 - [ ] `JSON.parse(localStorage.getItem('notes'))` in `App` throws on corrupt data and doesn't check it is an array; wrap in `try`/`catch` and fall back to `NOTES`.
 - [ ] `localStorage.setItem` in the `useEffect` can throw (quota full, private mode); wrap in `try`/`catch`.
 - [ ] Remove the temporary "Reset Data" button in `Header` and `resetData` in `App`.
@@ -128,6 +128,6 @@ Keep entries short (one line each). Tick them off as they are fixed.
 - [ ] `addNote` and `updateNote` save an empty `body` as `''`; `NoteCard` already hides it, so harmless, but be consistent with the sample notes (no `body` key).
 - [ ] `Board` hardcodes `md:grid-cols-3`; it won't follow if `COLUMNS` changes length.
 - [ ] `NoteForm`'s Escape `useEffect` re-subscribes on every render because `onClose` is a new arrow each time; harmless, but can be noted for later.
-- [ ] Cards can only be dragged with a mouse/touch pointer; no keyboard support (dnd-kit's `KeyboardSensor` would add it).
+- [ ] Keyboard dragging (`KeyboardSensor`) is set up; check that Space/Enter on a card's edit or delete button still clicks the button instead of starting a drag.
 - [ ] `public/productivity-pattern.svg` is unused; delete it or use it.
 - [ ] Re-run `npm run lint` and `npm run build` and check the app in the browser once more at the end.
