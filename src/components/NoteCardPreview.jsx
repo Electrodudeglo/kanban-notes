@@ -7,7 +7,7 @@ export default function NoteCardPreview({ title, body }) {
     <article className="cursor-grabbing rounded-[10px] border border-line bg-white p-3.5 shadow-lg">
       <div className="flex items-start gap-2">
         <h3 className="flex-1 text-[15px] font-semibold text-ink">{title}</h3>
-        <div className="-mt-1 -mr-1.5 flex shrink-0 text-muted" aria-hidden="true">
+        <div className="-mt-1 -mr-1.5 flex shrink-0 text-muted opacity-5" aria-hidden="true">
           <span className="flex size-7 items-center justify-center">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
