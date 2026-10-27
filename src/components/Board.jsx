@@ -1,10 +1,22 @@
+import { useState } from 'react';
 import Column from './Column';
 import NoteCard from './NoteCard';
+import NoteCardPreview from './NoteCardPreview';
 import { COLUMNS } from '../columns';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 
 export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }) {
+  const [activeId, setActiveId] = useState(null);
+  const activeNote = notes.find((note) => note.id === activeId);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor)
+  );
+
   function handleDrag(event) {
+    setActiveId(null);
+
     if (!event.over) {
       return; // dropped outside every zone
     }
@@ -13,7 +25,11 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
   }
 
   return (
-    <DndContext onDragEnd={handleDrag}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={(event) => setActiveId(event.active.id)}
+      onDragEnd={handleDrag}
+    >
       <main className="grid flex-1 grid-cols-1 gap-5 p-4 md:grid-cols-3 md:px-8 md:pt-6 md:pb-8">
         {COLUMNS.map((column) => {
           // Keep only the notes whose columnId matches this column's id.
@@ -43,6 +59,9 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
           );
         })}
       </main>
+      <DragOverlay>
+        {activeNote ? <NoteCardPreview title={activeNote.title} body={activeNote.body} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 }
