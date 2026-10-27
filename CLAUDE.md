@@ -102,5 +102,31 @@ Issues that have come up so far, for the owner to look back on:
 9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
 10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
 11. Self-study (done): error message instead of `alert` in `NoteForm`
-12. Moving cards between columns with dnd-kit: 12a `DndContext` in `Board` and `useDraggable` on `NoteCard` (done), 12b `useDroppable` on `Column` and an `onDragEnd` that moves the note to the column it was dropped on with an `isOver` border highlight (done), 12c polish (next): 12c-1 a sensor activation distance so the card's edit/delete buttons still click, 12c-2 tracking the dragged note in `activeId` state, 12c-3 a `DragOverlay` showing a copy of the card above everything, 12c-4 leaving the original card in place, faded, while dragging, 12d (optional) reordering cards within a column with `@dnd-kit/sortable`
-13. Searching notes from the header's search box: 13a a `searchQuery` state in `App` wired to `onSearch`, 13b filtering the notes passed to `Board` (derived from state, not stored), 13c case-insensitive matching on title and body, plus a "no matches" state
+12. Moving cards between columns with dnd-kit (done): 12a `DndContext` in `Board` and `useDraggable` on `NoteCard` (done), 12b `useDroppable` on `Column` and an `onDragEnd` that moves the note to the column it was dropped on with an `isOver` border highlight (done), 12c polish (done): 12c-1 a sensor activation distance so the card's edit/delete buttons still click, 12c-2 tracking the dragged note in `activeId` state, 12c-3 a `DragOverlay` showing a copy of the card above everything (uses the `NoteCardPreview` component), 12c-4 leaving the original card in place, faded, while dragging
+13. Re-sorting cards (next): dropping a card in the middle of a column puts it there instead of at the bottom, by re-ordering the `notes` array
+    - 13a `@dnd-kit/sortable` (`SortableContext` per column, `useSortable` on `NoteCard` in place of `useDraggable`)
+    - 13b `handleDrag` learns that `over.id` can now be a note id as well as a column id, and works out the target column and position
+    - 13c re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the order is saved to `localStorage`
+14. Undoing a delete: a small toast with an "Undo" button after a card is deleted, so deletes are not final for a while
+    - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it
+    - 14b a `Toast` component that shows for a few seconds with `setTimeout` (cleaned up in a `useEffect`)
+    - 14c "Undo" puts the note back where it was; the toast closing for good discards it
+    - 14d (later, optional) a trash can that holds deleted notes, with restore and empty
+15. Searching notes from the header's search box: 15a a `searchQuery` state in `App` wired to `onSearch`, 15b filtering the notes passed to `Board` (derived from state, not stored), 15c case-insensitive matching on title and body, plus a "no matches" state
+
+### Small issues to sort before calling it done
+
+Keep entries short (one line each). Tick them off as they are fixed.
+
+- [ ] Push `NoteCardPreview.jsx` and the matching `Board`/`NoteCard` changes (the 12c work) from the other laptop; this laptop's `Board` has no `DragOverlay`, `activeId` or sensors. Then add `NoteCardPreview` to Project structure.
+- [ ] `JSON.parse(localStorage.getItem('notes'))` in `App` throws on corrupt data and doesn't check it is an array; wrap in `try`/`catch` and fall back to `NOTES`.
+- [ ] `localStorage.setItem` in the `useEffect` can throw (quota full, private mode); wrap in `try`/`catch`.
+- [ ] Remove the temporary "Reset Data" button in `Header` and `resetData` in `App`.
+- [ ] `Header`'s search input is uncontrolled and `onSearch` is not passed from `App` yet (done by task 15).
+- [ ] `addNote` uses `Date.now()` as the id; two notes created in the same millisecond would clash. Fine for now, but `crypto.randomUUID()` is safer.
+- [ ] `addNote` and `updateNote` save an empty `body` as `''`; `NoteCard` already hides it, so harmless, but be consistent with the sample notes (no `body` key).
+- [ ] `Board` hardcodes `md:grid-cols-3`; it won't follow if `COLUMNS` changes length.
+- [ ] `NoteForm`'s Escape `useEffect` re-subscribes on every render because `onClose` is a new arrow each time; harmless, but can be noted for later.
+- [ ] Cards can only be dragged with a mouse/touch pointer; no keyboard support (dnd-kit's `KeyboardSensor` would add it).
+- [ ] `public/productivity-pattern.svg` is unused; delete it or use it.
+- [ ] Re-run `npm run lint` and `npm run build` and check the app in the browser once more at the end.
