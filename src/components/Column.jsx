@@ -1,11 +1,11 @@
 import { useDroppable } from '@dnd-kit/core';
 
 // One column. `children` is whatever you put between <Column>...</Column> —
-// later that will be your NoteCard components. With no children it shows
-// an empty state.
+// here, a SortableContext holding the NoteCards. When `count` is 0 it shows
+// an empty state instead.
 
 export default function Column({ title, color, count = 0, onAddNote, children, id }) {
-  const isEmpty = !children || (Array.isArray(children) && children.length === 0);
+  const isEmpty = count === 0;
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
