@@ -22,11 +22,12 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
       return; // dropped outside every zone
     }
 
-    if (!COLUMNS.some((column) => column.id === event.over.id)) {
-      return;
-    }
+    const overId = event.over.id;
+    const droppedOnColumn = COLUMNS.some((column) => column.id === overId);
 
-    onMoveNote(event.active.id, event.over.id);
+    const targetColumnId = droppedOnColumn ? overId : notes.find((note) => note.id === overId).columnId;
+
+    onMoveNote(event.active.id, targetColumnId);
   }
 
   return (
