@@ -4,6 +4,7 @@ import NoteCard from './NoteCard';
 import NoteCardPreview from './NoteCardPreview';
 import { COLUMNS } from '../columns';
 import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }) {
   const [activeId, setActiveId] = useState(null);
@@ -19,6 +20,10 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
 
     if (!event.over) {
       return; // dropped outside every zone
+    }
+
+    if (!COLUMNS.some((column) => column.id === event.over.id)) {
+      return;
     }
 
     onMoveNote(event.active.id, event.over.id);
@@ -45,16 +50,18 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
               onAddNote={() => onAddNote(column.id)}
               id={column.id}
             >
-              {columnNotes.map((note) => (
-                <NoteCard
-                  key={note.id}
-                  id={note.id}
-                  title={note.title}
-                  body={note.body}
-                  onRemove={() => onRemove(note.id)}
-                  onEdit={() => onEdit(note.id)}
-                />
-              ))}
+              <SortableContext items={columnNotes} strategy={verticalListSortingStrategy}>
+                {columnNotes.map((note) => (
+                  <NoteCard
+                    key={note.id}
+                    id={note.id}
+                    title={note.title}
+                    body={note.body}
+                    onRemove={() => onRemove(note.id)}
+                    onEdit={() => onEdit(note.id)}
+                  />
+                ))}
+              </SortableContext>
             </Column>
           );
         })}
