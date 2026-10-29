@@ -23,7 +23,7 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
   - `addNote(columnId, title, body)`, which adds a note to that column and closes the form
   - `deleteNote(id)`, which removes a note with `.filter()`
   - `updateNote(id, colId, newTitle, newBody)`, which replaces a note's column, title and body with `.map()` and closes the edit form
-  - `moveNote(noteId, columnId)`, which changes only a note's column with `.map()` (used by drag and drop)
+  - `moveNote(noteId, columnId, overId)`, used by drag and drop: changes the note's column with `.map()`, then, if it was dropped on a card (`overId` is a note id), moves it to that card's place in the array with `arrayMove` (indexes from `.findIndex()`)
   - `resetData()`, a temporary helper behind the header's reset button that clears the saved notes and reloads the page
 - `src/columns.js` exports `COLUMNS`, the list of columns (`{ id, title, color }`) used by `App`, `Board` and `NoteForm`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
@@ -104,11 +104,11 @@ Issues that have come up so far, for the owner to look back on:
 10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
 11. Self-study (done): error message instead of `alert` in `NoteForm`
 12. Moving cards between columns with dnd-kit (done): 12a `DndContext` in `Board` and `useDraggable` on `NoteCard` (done), 12b `useDroppable` on `Column` and an `onDragEnd` that moves the note to the column it was dropped on with an `isOver` border highlight (done), 12c polish (done): 12c-1 a sensor activation distance so the card's edit/delete buttons still click, 12c-2 tracking the dragged note in `activeId` state, 12c-3 a `DragOverlay` showing a copy of the card above everything (uses the `NoteCardPreview` component), 12c-4 leaving the original card in place, faded, while dragging
-13. Re-sorting cards (next): dropping a card in the middle of a column puts it there instead of at the bottom, by re-ordering the `notes` array
+13. Re-sorting cards: dropping a card in the middle of a column puts it there instead of at the bottom, by re-ordering the `notes` array
     - 13a `@dnd-kit/sortable` (`SortableContext` per column, `useSortable` on `NoteCard` in place of `useDraggable`) (done)
     - 13b `handleDrag` learns that `over.id` can now be a note id as well as a column id, and works out the target column from either (done)
-    - 13c the position: re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the dropped card lands where it was dropped and the order is saved to `localStorage`; `closestCorners` collision detection so `over` is the card under the pointer, and the column highlight driven by `overColumnId` state from `onDragOver` (next)
-    - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column
+    - 13c the position: re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the dropped card lands where it was dropped and the order is saved to `localStorage`; `closestCorners` collision detection so `over` is the card under the pointer, and the column highlight driven by `overColumnId` state from `onDragOver` (done)
+    - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column (next)
 14. Undoing a delete: a small toast with an "Undo" button after a card is deleted, so deletes are not final for a while
     - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it
     - 14b a `Toast` component that shows for a few seconds with `setTimeout` (cleaned up in a `useEffect`)
@@ -130,6 +130,6 @@ Keep entries short (one line each). Tick them off as they are fixed.
 - [ ] `Board` hardcodes `md:grid-cols-3`; it won't follow if `COLUMNS` changes length.
 - [ ] `NoteForm`'s Escape `useEffect` re-subscribes on every render because `onClose` is a new arrow each time; harmless, but can be noted for later.
 - [ ] Keyboard dragging (`KeyboardSensor`) is set up; check that Space/Enter on a card's edit or delete button still clicks the button instead of starting a drag.
-- [ ] `DndContext` has no `onDragCancel`; a cancelled drag (Escape in a keyboard drag) leaves `activeId` (and later `overColumnId`) set.
+- [ ] `DndContext` has no `onDragCancel`; a cancelled drag (Escape in a keyboard drag) leaves `activeId` and `overColumnId` set, and (after 13d) keeps a card in the column it was dragged into.
 - [ ] `public/productivity-pattern.svg` is unused; delete it or use it.
 - [ ] Re-run `npm run lint` and `npm run build` and check the app in the browser once more at the end.
