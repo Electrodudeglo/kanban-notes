@@ -61,10 +61,18 @@ function App() {
   }
 
   function moveNote(noteId, columnId, overId) {
-    setNotes((prev) =>
-      prev.map((note) => (note.id === noteId ? { ...note, columnId } : note))
-    );
-    console.log(overId)
+    setNotes((prev) => {
+      const oldIndex = prev.findIndex((note) => note.id === noteId);
+      const newIndex = prev.findIndex((note) => note.id === overId);
+
+      const moved = prev.map((note) => (note.id === noteId ? { ...note, columnId } : note));
+
+      if (newIndex === -1) {
+        return moved;
+      }
+
+      return arrayMove(moved, oldIndex, newIndex);
+    });
   }
 
   // Delete this when finishing everything
