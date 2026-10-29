@@ -4,15 +4,15 @@ import { useDroppable } from '@dnd-kit/core';
 // here, a SortableContext holding the NoteCards. When `count` is 0 it shows
 // an empty state instead.
 
-export default function Column({ title, color, count = 0, onAddNote, children, id }) {
+export default function Column({ title, color, count = 0, onAddNote, children, id, isHighlighted }) {
   const isEmpty = count === 0;
-  const { setNodeRef, isOver } = useDroppable({ id });
+  const { setNodeRef } = useDroppable({ id });
 
   return (
     <section
       ref={setNodeRef}
       aria-label={title}
-      className={`flex min-h-0 flex-col gap-3 rounded-[14px] border-2 bg-column p-4 transition-colors ${isOver ? 'border-accent' : 'border-transparent'}`}
+      className={`flex min-h-0 flex-col gap-3 rounded-[14px] border-2 bg-column p-4 transition-colors ${isHighlighted ? 'border-accent' : 'border-transparent'}`}
     >
       <div className="flex items-center gap-2.5 px-1">
         {/* The dot colour comes from data, so it's an inline style rather than a class:
