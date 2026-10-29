@@ -34,6 +34,15 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
     onMoveNote(event.active.id, targetColumnId, overId);
   }
 
+  function handleDragover(event) {
+
+    if(!event.over) {
+      setOverColumnId(null);
+      return;
+    }
+    
+  }
+
   return (
     <DndContext
       sensors={sensors}
