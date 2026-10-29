@@ -3,11 +3,12 @@ import Column from './Column';
 import NoteCard from './NoteCard';
 import NoteCardPreview from './NoteCardPreview';
 import { COLUMNS } from '../columns';
-import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors, closestCorners } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }) {
   const [activeId, setActiveId] = useState(null);
+  const [overColumnId, setOverColumnId] = useState(null);
   const activeNote = notes.find((note) => note.id === activeId);
 
   const sensors = useSensors(
@@ -15,19 +16,22 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
     useSensor(KeyboardSensor)
   );
 
+  function getColumnId(overId) {
+    const droppedOnColumn = COLUMNS.some((column) => column.id === overId);
+    return droppedOnColumn ? overId : notes.find((note) => note.id === overId).columnId;
+  }
+
   function handleDrag(event) {
     setActiveId(null);
+    setOverColumnId(null);
 
     if (!event.over) {
       return; // dropped outside every zone
     }
 
     const overId = event.over.id;
-    const droppedOnColumn = COLUMNS.some((column) => column.id === overId);
-
-    const targetColumnId = droppedOnColumn ? overId : notes.find((note) => note.id === overId).columnId;
-
-    onMoveNote(event.active.id, targetColumnId);
+    const targetColumnId = getColumnId(overId);
+    onMoveNote(event.active.id, targetColumnId, overId);
   }
 
   return (
@@ -35,6 +39,8 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
       sensors={sensors}
       onDragStart={(event) => setActiveId(event.active.id)}
       onDragEnd={handleDrag}
+      onDragOver={(event) => setOverColumnId(event.over ? getColumnId(event.over.id) : null)}
+      collisionDetection={closestCorners}
     >
       <main className="grid flex-1 grid-cols-1 gap-5 p-4 md:grid-cols-3 md:px-8 md:pt-6 md:pb-8">
         {COLUMNS.map((column) => {
@@ -50,6 +56,7 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
               count={columnNotes.length}
               onAddNote={() => onAddNote(column.id)}
               id={column.id}
+              isHighlighted={overColumnId === column.id}
             >
               <SortableContext items={columnNotes} strategy={verticalListSortingStrategy}>
                 {columnNotes.map((note) => (
