@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Board from './components/Board';
 import NoteForm from './components/NoteForm';
 import { COLUMNS } from './columns';
+import { arrayMove } from '@dnd-kit/sortable';
 
 const NOTES = [
   { id: 1, columnId: 'todo', title: 'Buy groceries', body: 'Milk, eggs, bread' },
@@ -59,10 +60,11 @@ function App() {
     setEditId(null);
   }
 
-  function moveNote(noteId, columnId) {
+  function moveNote(noteId, columnId, overId) {
     setNotes((prev) =>
       prev.map((note) => (note.id === noteId ? { ...note, columnId } : note))
     );
+    console.log(overId)
   }
 
   // Delete this when finishing everything
