@@ -35,6 +35,8 @@ function App() {
 
   const [addingTo, setAddingTo] = useState(null);
 
+  const [lastDeleted, setLastDeleted] = useState(null);
+
   const editingNote = notes.find((note) => note.id === editId);
 
   useEffect(() => {
@@ -48,6 +50,9 @@ function App() {
   }
 
   function deleteNote(id) {
+    const index = notes.findIndex((note) => note.id === id);
+    const note = notes[index];
+    setLastDeleted({ note, index });
     setNotes((prev) => prev.filter((note) => note.id !== id));
   }
 
