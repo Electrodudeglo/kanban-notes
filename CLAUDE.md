@@ -108,7 +108,7 @@ Issues that have come up so far, for the owner to look back on:
     - 13a `@dnd-kit/sortable` (`SortableContext` per column, `useSortable` on `NoteCard` in place of `useDraggable`) (done)
     - 13b `handleDrag` learns that `over.id` can now be a note id as well as a column id, and works out the target column from either (done)
     - 13c the position: re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the dropped card lands where it was dropped and the order is saved to `localStorage`; `closestCorners` collision detection so `over` is the card under the pointer, and the column highlight driven by `overColumnId` state from `onDragOver` (done)
-    - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column (next)
+    - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column (done)
 14. Undoing a delete: a small toast with an "Undo" button after a card is deleted, so deletes are not final for a while
     - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it
     - 14b a `Toast` component that shows for a few seconds with `setTimeout` (cleaned up in a `useEffect`)
