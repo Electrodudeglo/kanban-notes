@@ -110,7 +110,7 @@ Issues that have come up so far, for the owner to look back on:
     - 13c the position: re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the dropped card lands where it was dropped and the order is saved to `localStorage`; `closestCorners` collision detection so `over` is the card under the pointer, and the column highlight driven by `overColumnId` state from `onDragOver` (done)
     - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column (done)
 14. Undoing a delete: a small toast with an "Undo" button after a card is deleted, so deletes are not final for a while
-    - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it
+    - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it (in progress)
     - 14b a `Toast` component that shows for a few seconds with `setTimeout` (cleaned up in a `useEffect`)
     - 14c "Undo" puts the note back where it was; the toast closing for good discards it
     - 14d (later, optional) a trash can that holds deleted notes, with restore and empty
