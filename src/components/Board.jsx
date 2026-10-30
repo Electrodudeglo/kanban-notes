@@ -35,12 +35,19 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
   }
 
   function handleDragover(event) {
-
-    if(!event.over) {
+    if (!event.over) {
       setOverColumnId(null);
       return;
     }
-    
+
+    const targetColumnId = getColumnId(event.over.id);
+    setOverColumnId(targetColumnId);
+
+    const draggedNote = notes.find((note) => note.id === event.active.id);
+
+    if (draggedNote.columnId !== targetColumnId) {
+      onMoveNote(event.active.id, targetColumnId, event.over.id);
+    }
   }
 
   return (
@@ -48,7 +55,7 @@ export default function Board({ notes, onRemove, onEdit, onAddNote, onMoveNote }
       sensors={sensors}
       onDragStart={(event) => setActiveId(event.active.id)}
       onDragEnd={handleDrag}
-      onDragOver={(event) => setOverColumnId(event.over ? getColumnId(event.over.id) : null)}
+      onDragOver={handleDragover}
       collisionDetection={closestCorners}
     >
       <main className="grid flex-1 grid-cols-1 gap-5 p-4 md:grid-cols-3 md:px-8 md:pt-6 md:pb-8">
