@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Board from './components/Board';
 import NoteForm from './components/NoteForm';
 import { COLUMNS } from './columns';
+import { arrayMove } from '@dnd-kit/sortable';
 
 const NOTES = [
   { id: 1, columnId: 'todo', title: 'Buy groceries', body: 'Milk, eggs, bread' },
@@ -59,6 +60,21 @@ function App() {
     setEditId(null);
   }
 
+  function moveNote(noteId, columnId, overId) {
+    setNotes((prev) => {
+      const oldIndex = prev.findIndex((note) => note.id === noteId);
+      const newIndex = prev.findIndex((note) => note.id === overId);
+
+      const moved = prev.map((note) => (note.id === noteId ? { ...note, columnId } : note));
+
+      if (newIndex === -1) {
+        return moved;
+      }
+
+      return arrayMove(moved, oldIndex, newIndex);
+    });
+  }
+
   // Delete this when finishing everything
   function resetData() {
     localStorage.removeItem('notes');
@@ -91,6 +107,7 @@ function App() {
         onRemove={deleteNote}
         onEdit={setEditId}
         onAddNote={setAddingTo}
+        onMoveNote={moveNote}
       />
     </div>
   );

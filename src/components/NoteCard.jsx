@@ -1,8 +1,19 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 // One note. It only displays what it's given through props — it doesn't
 // know where notes come from or how they're stored. That's the parent's job.
-export default function NoteCard({ title, body, onRemove, onEdit }) {
+export default function NoteCard({ title, body, onRemove, onEdit, id }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+
   return (
-    <article className="rounded-[10px] border border-line bg-white p-3.5 shadow-sm">
+    <article
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className={`cursor-grab rounded-[10px] border border-line bg-white p-3.5 shadow-sm ${isDragging ? 'opacity-40' : ''}`}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+    >
       <div className="flex items-start gap-2">
         <h3 className="flex-1 text-[15px] font-semibold text-ink">{title}</h3>
         <div className="-mt-1 -mr-1.5 flex shrink-0">

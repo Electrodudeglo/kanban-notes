@@ -4,4 +4,5 @@ export const COLUMNS = [
   { id: 'todo', title: 'To do', color: '#8A847A' },
   { id: 'in-progress', title: 'In progress', color: '#C07A2C' },
   { id: 'done', title: 'Done', color: '#2F5D50' },
+  {id: 'special', title:'Special', color: '#d264fa'}
 ];

@@ -23,15 +23,17 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
   - `addNote(columnId, title, body)`, which adds a note to that column and closes the form
   - `deleteNote(id)`, which removes a note with `.filter()`
   - `updateNote(id, colId, newTitle, newBody)`, which replaces a note's column, title and body with `.map()` and closes the edit form
+  - `moveNote(noteId, columnId, overId)`, used by drag and drop: changes the note's column with `.map()`, then, if it was dropped on a card (`overId` is a note id), moves it to that card's place in the array with `arrayMove` (indexes from `.findIndex()`)
   - `resetData()`, a temporary helper behind the header's reset button that clears the saved notes and reloads the page
 - `src/columns.js` exports `COLUMNS`, the list of columns (`{ id, title, color }`) used by `App`, `Board` and `NoteForm`
 - Each note is `{ id, columnId, title, body? }`; `columnId` matches a column `id` in `COLUMNS`
 - `src/components/` holds the UI components:
   - `Header.jsx`: logo, title, search box, "New note" button and a temporary reset button (`onSearch` not wired up yet; `onNewNote` opens the note form for "To do"; `onDataReset` calls `resetData`)
   - `NoteForm.jsx`: a modal dialog used for both adding and editing; starts from `initialTitle`/`initialBody` (default `''`) and `initialColId`, keeps its own draft state, calls `onSave(columnId, title, body)` on submit and `onClose` on Cancel, Escape or a click outside; has a "Column" radio group at the top, built from `COLUMNS` with `.map()` and controlled by `colSelection` state; an empty title sets `inputError`, which shows a red message under the Title field until the title is edited
-  - `Board.jsx`: takes `notes`, `onRemove`, `onEdit` and `onAddNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
-  - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state; notes go in as `children`
-  - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`)
+  - `Board.jsx`: keeps `activeId` (the note being dragged, or `null`) and derives `activeNote` with `.find()`; keeps `overColumnId` (the column the card would land in, set in `onDragOver`) and passes each `Column` an `isHighlighted` prop from it; wraps the board in one dnd-kit `DndContext` (pointer sensor with a 5px activation distance, plus keyboard; `closestCorners` collision detection) with a `DragOverlay`; `getColumnId(overId)` turns a column id or a note id into a column id; `handleDrag` uses it and calls `onMoveNote(noteId, columnId, overId)` (and does nothing when dropped outside every target); each column's cards are wrapped in a `SortableContext` (`verticalListSortingStrategy`); takes `notes`, `onRemove`, `onEdit`, `onAddNote` and `onMoveNote` as props; gives each card its own `onRemove`/`onEdit` with the note's id built in, and each column its own `onAddNote` with the column's id built in; renders the columns from `COLUMNS` and gives each one its own notes with `.filter()` + `.map()`
+  - `Column.jsx`: one column with a colored dot, note count, "+" button (`onAddNote`, opens the form for that column) and an empty state (shown when `count` is 0); notes go in as `children`; a drop target via `useDroppable` with its `id` prop; its border turns `border-accent` while `isHighlighted` is true (a card is over the column or one of its cards)
+  - `NoteCard.jsx`: one note card showing `title`, an optional `body`, and edit and delete buttons (`onEdit`, `onRemove`); sortable with `useSortable` using its `id` prop (`transform`/`transition` let cards slide aside); fades (`isDragging`) while being dragged
+  - `NoteCardPreview.jsx`: a plain copy of a card (title, body and non-interactive edit/delete icons so it matches the real card's size; no hooks or handlers) shown in the `DragOverlay` while dragging
 - `src/index.css` holds the Google Fonts import, the Tailwind import, design tokens in `@theme` (colors such as `bg-page` and `text-accent`, plus `font-display`) and base body styles
 - `public/` holds static files (favicon, `productivity-pattern.svg`, which is currently unused)
 
@@ -41,7 +43,7 @@ A kanban board and notes app built with React 19, Vite and Tailwind CSS v4.
 - Add new colors and fonts as tokens in `@theme` in `src/index.css`, and use the generated utilities rather than hex values in components. Use inline styles only for values that come from data at runtime (e.g. column dot colors).
 - Fonts: IBM Plex Sans for body text (`font-sans`) and Fraunces for headings (`font-display`).
 - Light mode only; dark mode is disabled for now.
-- Drag and drop uses dnd-kit (`@dnd-kit/core`, `@dnd-kit/sortable`).
+- Drag and drop uses dnd-kit (`@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`; already installed).
 
 ## Rules
 
@@ -100,4 +102,34 @@ Issues that have come up so far, for the owner to look back on:
 8. Column "+" buttons: 8a back to a working state (done), 8b `addingTo` state replacing `isAdding` (done), 8c passing the column to `addNote` from `App`'s `onSave` arrow (done), 8d wiring each column's "+" button through `Board` (done)
 9. Self-study (done, ended early): the owner refactored a little and styled a column picker in `NoteForm`
 10. Choosing the column in `NoteForm`: 10a controlled radios with a `colSelection` state (done), 10b sending the column up through `onSave` so new notes land in the picked column (done), 10c moving a note to another column when editing (done), 10d rendering the radios from `COLUMNS` with `.map()` (done), 10e removing saved notes whose column no longer exists in `COLUMNS` (done)
-11. Self-study (current)
+11. Self-study (done): error message instead of `alert` in `NoteForm`
+12. Moving cards between columns with dnd-kit (done): 12a `DndContext` in `Board` and `useDraggable` on `NoteCard` (done), 12b `useDroppable` on `Column` and an `onDragEnd` that moves the note to the column it was dropped on with an `isOver` border highlight (done), 12c polish (done): 12c-1 a sensor activation distance so the card's edit/delete buttons still click, 12c-2 tracking the dragged note in `activeId` state, 12c-3 a `DragOverlay` showing a copy of the card above everything (uses the `NoteCardPreview` component), 12c-4 leaving the original card in place, faded, while dragging
+13. Re-sorting cards: dropping a card in the middle of a column puts it there instead of at the bottom, by re-ordering the `notes` array
+    - 13a `@dnd-kit/sortable` (`SortableContext` per column, `useSortable` on `NoteCard` in place of `useDraggable`) (done)
+    - 13b `handleDrag` learns that `over.id` can now be a note id as well as a column id, and works out the target column from either (done)
+    - 13c the position: re-ordering the `notes` array with `arrayMove` (or `.splice()`) so the dropped card lands where it was dropped and the order is saved to `localStorage`; `closestCorners` collision detection so `over` is the card under the pointer, and the column highlight driven by `overColumnId` state from `onDragOver` (done)
+    - 13d (later, optional) `onDragOver` so a card dragged into another column opens a gap there while dragging, not just in its own column (done)
+14. Undoing a delete: a small toast with an "Undo" button after a card is deleted, so deletes are not final for a while
+    - 14a `deleteNote` keeps the removed note (and its position) in state instead of dropping it
+    - 14b a `Toast` component that shows for a few seconds with `setTimeout` (cleaned up in a `useEffect`)
+    - 14c "Undo" puts the note back where it was; the toast closing for good discards it
+    - 14d (later, optional) a trash can that holds deleted notes, with restore and empty
+15. Searching notes from the header's search box: 15a a `searchQuery` state in `App` wired to `onSearch`, 15b filtering the notes passed to `Board` (derived from state, not stored), 15c case-insensitive matching on title and body, plus a "no matches" state
+
+### Small issues to sort before calling it done
+
+Keep entries short (one line each). Tick them off as they are fixed.
+
+- [x] Push `NoteCardPreview.jsx` and the matching `Board`/`NoteCard` changes (the 12c work) from the other laptop; then add `NoteCardPreview` to Project structure.
+- [ ] `JSON.parse(localStorage.getItem('notes'))` in `App` throws on corrupt data and doesn't check it is an array; wrap in `try`/`catch` and fall back to `NOTES`.
+- [ ] `localStorage.setItem` in the `useEffect` can throw (quota full, private mode); wrap in `try`/`catch`.
+- [ ] Remove the temporary "Reset Data" button in `Header` and `resetData` in `App`.
+- [ ] `Header`'s search input is uncontrolled and `onSearch` is not passed from `App` yet (done by task 15).
+- [ ] `addNote` uses `Date.now()` as the id; two notes created in the same millisecond would clash. Fine for now, but `crypto.randomUUID()` is safer.
+- [ ] `addNote` and `updateNote` save an empty `body` as `''`; `NoteCard` already hides it, so harmless, but be consistent with the sample notes (no `body` key).
+- [ ] `Board` hardcodes `md:grid-cols-3`; it won't follow if `COLUMNS` changes length.
+- [ ] `NoteForm`'s Escape `useEffect` re-subscribes on every render because `onClose` is a new arrow each time; harmless, but can be noted for later.
+- [ ] Keyboard dragging (`KeyboardSensor`) is set up; check that Space/Enter on a card's edit or delete button still clicks the button instead of starting a drag.
+- [ ] `DndContext` has no `onDragCancel`; a cancelled drag (Escape in a keyboard drag) leaves `activeId` and `overColumnId` set, and (after 13d) keeps a card in the column it was dragged into.
+- [ ] `public/productivity-pattern.svg` is unused; delete it or use it.
+- [ ] Re-run `npm run lint` and `npm run build` and check the app in the browser once more at the end.

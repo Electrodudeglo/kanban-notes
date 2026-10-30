@@ -1,11 +1,19 @@
+import { useDroppable } from '@dnd-kit/core';
+
 // One column. `children` is whatever you put between <Column>...</Column> —
-// later that will be your NoteCard components. With no children it shows
-// an empty state.
-export default function Column({ title, color, count = 0, onAddNote, children }) {
-  const isEmpty = !children || (Array.isArray(children) && children.length === 0);
+// here, a SortableContext holding the NoteCards. When `count` is 0 it shows
+// an empty state instead.
+
+export default function Column({ title, color, count = 0, onAddNote, children, id, isHighlighted }) {
+  const isEmpty = count === 0;
+  const { setNodeRef } = useDroppable({ id });
 
   return (
-    <section aria-label={title} className="flex min-h-0 flex-col gap-3 rounded-[14px] bg-column p-4">
+    <section
+      ref={setNodeRef}
+      aria-label={title}
+      className={`flex min-h-0 flex-col gap-3 rounded-[14px] border-2 bg-column p-4 transition-colors ${isHighlighted ? 'border-accent' : 'border-transparent'}`}
+    >
       <div className="flex items-center gap-2.5 px-1">
         {/* The dot colour comes from data, so it's an inline style rather than a class:
             Tailwind can't generate classes from values that only exist at runtime. */}
